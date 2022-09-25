@@ -55,7 +55,9 @@ export class InteractiveMap extends React.Component<{cities:string[]}, IState> {
         console.log("state", this.state.geoJsonFeatures);
 
         return (
-            <Map height={800} defaultCenter={[50.879, 4.6997]} defaultZoom={11} provider={stamenTerrain}>
+            <Map height={1000} defaultCenter={[
+              33.312805, 44.361488
+              ]} defaultZoom={7}>
             <GeoJson data = {{
                 type: "FeatureCollection",
                 features: this.state.geoJsonFeatures

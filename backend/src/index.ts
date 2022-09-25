@@ -3,12 +3,14 @@ import {Database} from 'sqlite3';
 
 import path from 'path'
 import cors from'cors'
-const app: Express = express();
 const port = process.env.PORT || 1200;
-app.use(cors())
-console.log("Dir", __dirname);
-
-const db = new Database('/usr/src/app/db/main.db')
+const NODE_ENV = process.argv[2]
+let db:Database
+if (NODE_ENV === 'production') {
+    db = new Database('/usr/src/app/db/main.db')
+} else {
+    db = new Database('../db/main.db')
+}
 function read_database(sql:string, param?:any):Promise<Array<any>> {
     return new Promise((resolve, reject) => {
         db.all(sql, param, (err,rows) => {
@@ -17,6 +19,10 @@ function read_database(sql:string, param?:any):Promise<Array<any>> {
         })
     })
 }
+
+
+const app: Express = express();
+app.use(cors())
 const api = express.Router()
 
 

@@ -6,7 +6,9 @@ import cors from'cors'
 const app: Express = express();
 const port = 1200;
 app.use(cors())
-const db = new Database('./db/main.db')
+console.log("Dir", __dirname);
+
+const db = new Database('/usr/src/app/db/main.db')
 function read_database(sql:string, param?:any):Promise<Array<any>> {
     return new Promise((resolve, reject) => {
         db.all(sql, param, (err,rows) => {
@@ -88,9 +90,9 @@ api.get('/corn', async (req: Request, res: Response) => {
 });
 
 app.use('/api',api)
-app.use(express.static("../frontend/build"))
+app.use(express.static("/usr/src/app/frontend/build"))
 
 app.listen(port, async () => {
 
-  console.log(`⚡️[server]: Server is running at`);
+  console.log(`⚡️[server]: Server is running at ${__dirname}`);
 });

@@ -10,6 +10,9 @@ EXPOSE 1200
 # COPY package*.json ./
 RUN mkdir frontend
 RUN mkdir backend
+RUN mkdir db
+
+COPY db ./db
 COPY frontend ./frontend
 RUN cd frontend && npm install && npm run build
 

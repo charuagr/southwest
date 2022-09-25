@@ -6,7 +6,7 @@ import {useRef, useEffect} from "react"
 import {Map, Marker, GeoJson, GeoJsonFeature} from 'pigeon-maps'
 
 import {InteractiveMap} from './Map'
-
+import {backend_url} from './util'
 class TableItem extends React.Component<{name:string}> {
   render() {
     return <option> {this.props.name}</option>
@@ -21,7 +21,7 @@ class Cities extends React.Component<{country:string}, {list:Array<string>}> {
   }
 
   componentDidMount() {
-    axios.get("http://localhost:1200/cities").then((res:any)=>{
+    axios.get(backend_url + "cities").then((res:any)=>{
       
       this.setState({list:res.data})
     })
@@ -52,7 +52,7 @@ class Params extends React.Component<{}, {list:Array<string>}> {
   }
 
   componentDidMount() {
-    axios.get("http://localhost:1200/params").then((res:any)=>{
+    axios.get(backend_url + "params").then((res:any)=>{
       
       this.setState({list:res.data})
     })

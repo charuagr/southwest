@@ -3,7 +3,7 @@ import {Map, Marker, GeoJson, GeoJsonFeature} from 'pigeon-maps'
 import axios from 'axios';
 import {osm} from 'pigeon-maps/providers'
 import { stamenTerrain } from 'pigeon-maps/providers'
-
+import {backend_url} from './util'
 const geoJsonSample = {
     type: "FeatureCollection",
     features: [
@@ -41,7 +41,7 @@ export class InteractiveMap extends React.Component<{cities:string[]}, IState> {
     async componentDidMount() {
         const geoFeatures:Array<any> = []
         for (const x of this.props.cities) {
-            let dat = await axios.get("http://localhost:1200/geojson/" + x)
+            let dat = await axios.get(backend_url + "geojson/" + x)
             
             geoFeatures.push(dat.data)
         }

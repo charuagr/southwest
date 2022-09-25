@@ -1,10 +1,12 @@
 import express, { Express, Request, Response } from 'express';
 import {Database} from 'sqlite3';
+
+import path from 'path'
 import cors from'cors'
 const app: Express = express();
 const port = 1200;
 app.use(cors())
-const db = new Database('../db/main.db')
+const db = new Database('./db/main.db')
 function read_database(sql:string, param?:any):Promise<Array<any>> {
     return new Promise((resolve, reject) => {
         db.all(sql, param, (err,rows) => {
@@ -13,14 +15,10 @@ function read_database(sql:string, param?:any):Promise<Array<any>> {
         })
     })
 }
-
-app.get('/gooo', async (req, res) => {
-
-    
-})
+const api = express.Router()
 
 
-app.get('/geojson/:section', async (req, res) => {
+api.get('/geojson/:section', async (req, res) => {
     console.log(req.params.section);
     
     let data:Array<any> = await read_database("select geometry from Iraq where ADM3_EN=$city", {
@@ -63,7 +61,7 @@ app.get('/geojson/:section', async (req, res) => {
 
 
 })
-app.get('/params', async (req:Request, res:Response) => {
+api.get('/params', async (req:Request, res:Response) => {
     let response:Array<string> = []
     let data:Array<any> = await read_database("PRAGMA table_info(Iraq)")
     
@@ -74,7 +72,7 @@ app.get('/params', async (req:Request, res:Response) => {
     res.send(response);
 
 })
-app.get('/cities', async (req: Request, res: Response) => {
+api.get('/cities', async (req: Request, res: Response) => {
     let response:Array<string> = []
     let data:Array<any> = await read_database("select ADM3_EN from Iraq")
     for (const x of data) {
@@ -83,13 +81,16 @@ app.get('/cities', async (req: Request, res: Response) => {
     
     res.send(response);
 })
-app.get('/corn', async (req: Request, res: Response) => {
+api.get('/corn', async (req: Request, res: Response) => {
     
     let data = await read_database("select ADM3_EN,\"Corn Production\" from Iraq")
     res.send(data);
 });
 
+app.use('/api',api)
+app.use(express.static("../frontend/build"))
+
 app.listen(port, async () => {
 
-  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+  console.log(`⚡️[server]: Server is running at`);
 });

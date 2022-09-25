@@ -5,6 +5,8 @@ import path from 'path'
 import cors from'cors'
 const port = process.env.PORT || 1200;
 const NODE_ENV = process.argv[2]
+console.log("ENV", NODE_ENV);
+
 let db:Database
 if (NODE_ENV === 'production') {
     db = new Database('/usr/src/app/db/main.db')
@@ -27,7 +29,6 @@ const api = express.Router()
 
 
 api.get('/geojson/:section', async (req, res) => {
-    console.log(req.params.section);
     
     let data:Array<any> = await read_database("select geometry from Iraq where ADM3_EN=$city", {
         $city: req.params.section
@@ -100,5 +101,5 @@ app.use(express.static("/usr/src/app/frontend/build"))
 
 app.listen(port, async () => {
 
-  console.log(`⚡️[server]: Server is running at ${__dirname}`);
+  console.log(`⚡️[server]: Server is running at ${NODE_ENV}`);
 });

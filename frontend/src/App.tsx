@@ -2,9 +2,10 @@ import React from 'react';
 import './App.css';
 import axios from 'axios';
 import Select from 'react-select';
-import MapView from "@arcgis/core/views/MapView";
-import WebMap from "@arcgis/core/WebMap";
 import {useRef, useEffect} from "react"
+import {Map, Marker, GeoJson, GeoJsonFeature} from 'pigeon-maps'
+
+import {InteractiveMap} from './Map'
 
 class TableItem extends React.Component<{name:string}> {
   render() {
@@ -72,144 +73,281 @@ class Params extends React.Component<{}, {list:Array<string>}> {
 }
 
 
-function ArcMap2() {
-  const mapDiv = useRef(null);
 
-  useEffect(() => {
-    if (mapDiv.current) {
-      const map = new WebMap({
-        portalItem: {
-          id: "aa1d3f80270146208328cf66d022e09c"
-        }
-      });
-      
-      const view = new MapView({
-        map: map,
-        container: mapDiv.current,
-        center: [-118.244, 34.052],
-        zoom: 20
-      });
-    }
-  }, []);
-
-  return <div className="mapDiv" ref={mapDiv}></div>;
-}
-// class ArcMap1 extends React.Component<{},{}>{
-//   mapDiv = useRef(null)
-//   constructor(props:{}) {
-//     super(props)
-//   }
-//   componentDidMount() {
-//     const map = new ArcGISMap({
-//             basemap: "streets-vector"
-//     });
-//     if(this.mapDiv.current ) {
-//       // console.log(this.mapDiv);
-      
-//       const view = new MapView({
-//         map: map,
-//         container: "test",
-//         center: [-118.244, 34.052],
-//         zoom: 12
-//       });
-//     }
-//   }
-
-//   render() {
-//         return (
-//         <div id="viewDiv" ref = {this.mapDiv}></div>
-//     )
-//   }
-// }
-// function ArcMap() {
-
-//   const mapDiv = useRef(null);
-
-//   useEffect(() => {
-//     if (mapDiv.current) {
-//       /**
-//        * Initialize application
-//        */
-//       const webmap = new WebMap({
-//         portalItem: {
-//           id: "aa1d3f80270146208328cf66d022e09c"
-//         }
-//       });
-
-//       const view = new MapView({
-//         container: mapDiv.current,
-//         map: webmap
-//       });
-
-//       const bookmarks = new Bookmarks({
-//         view,
-//         // allows bookmarks to be added, edited, or deleted
-//         editingEnabled: true
-//       });
-
-//       const bkExpand = new Expand({
-//         view,
-//         content: bookmarks,
-//         expanded: true
-//       });
-
-//       // Add the widget to the top-right corner of the view
-//       view.ui.add(bkExpand, "top-right");
-
-//       // bonus - how many bookmarks in the webmap?
-//       webmap.when(() => {
-//         if (webmap.bookmarks && webmap.bookmarks.length) {
-//           console.log("Bookmarks: ", webmap.bookmarks.length);
-//         } else {
-//           console.log("No bookmarks in this webmap.");
-//         }
-//       });
-//     }
-//   }, []);
-
-//   return <div className="mapDiv" ref={mapDiv}></div>;
-// }
-// class ArcMap extends React.Component<{},{}> {
-
-
-
-
-//   componentDidMount() {
-
-    
-
-//   }
-
-//   render() {
-//     const map = new ArcGISMap({
-//       basemap: "streets-vector"
-//     });
-    
-//     const view = new MapView({
-//       map: map,
-//       container: "viewDiv",
-//       center: [-118.244, 34.052],
-//       zoom: 12
-//     });
-//     return (
-//       <div>
-//         <h1>Hello</h1>
-//         <div id="viewDiv">
-
-//         </div>
-
-//       </div>
-
-//     )
-//   }
-// }
 
 function App() {
   return (
     <div >
         <Cities country = "Iraq"></Cities>
         <Params></Params>
-        <ArcMap2></ArcMap2>
+        <InteractiveMap cities={["Abi Gharaq",
+"Abu Dalf",
+"Abu Ghraib",
+"Agjalare",
+"Akaika",
+"Al-Abbasi",
+"Al-Adel",
+"Al-Ahrar",
+"Al-Alam",
+"Al-Amirya",
+"Al-Atheem",
+"Al-Ayadiya",
+"Al-Aziz",
+"Al-Aziziya",
+"Al-Baghdady",
+"Al-Bahhar",
+"Al-Bashaer",
+"Al-Battha'a",
+"Al-Bdair",
+"Al-Daghara",
+"Al-Dair",
+"Al-Dawaya",
+"Al-Dujeel",
+"Al-Duloeyah",
+"Al-Duski",
+"Al-Emam",
+"Al-Esshaqi",
+"Al-Fadhliya",
+"Al-Fahama",
+"Al-Fajer",
+"Al-Fawwar",
+"Al-Forat",
+"Al-Fuhood",
+"Al-Garma",
+"Al-Gharraf",
+"Al-Habbaniya",
+"Al-Hafriya",
+"Al-Hammar",
+"Al-Haqlaniya",
+"Al-Hartha",
+"Al-Hassainya",
+"Al-Haydariya",
+"Al-Heera",
+"Al-Hilal",
+"Al-Howweir",
+"Al-Huriya",
+"Al-Iskandaria",
+"Al-Islah",
+"Al-Jadwal Al-Ghrabi",
+"Al-Jisr",
+"Al-Karabla",
+"Al-Karrada Al-Sharqia",
+"Al-Kifil",
+"Al-Latifya",
+"Al-Madhatiya",
+"Al-Majd",
+"Al-Mamoon",
+"Al-Mansour",
+"Al-Mansouriyah",
+"Al-Mashroo",
+"Al-Mihanawiya",
+"Al-Mowafaqiya",
+"Al-Msharah",
+"Al-Muhamadath",
+"Al-Multaka",
+"Al-Muotasim",
+"Al-Najmi",
+"Al-Nashwa",
+"Al-Nasr",
+"Al-Nekhaeeb",
+"Al-Obiadi",
+"Al-Qahtanya",
+"Al-Qairawan",
+"Al-Qasim",
+"Al-Qayarra",
+"Al-Qosh",
+"Al-Rahhaliya",
+"Al-Rashad",
+"Al-Rashdia",
+"Al-Rasheed",
+"Al-Riyadh",
+"Al-Rummaneh",
+"Al-Saadiya",
+"Al-Sadeer",
+"Al-Salam",
+"Al-Saniya",
+"Al-Shabaka",
+"Al-Shafeia",
+"Al-Shamal",
+"Al-Shehamiya",
+"Al-Shinafiya",
+"Al-Shomaly",
+"Al-Siba",
+"Al-Sowair",
+"Al-Synia",
+"Al-Taji",
+"Al-Tar",
+"Al-Tarmiya",
+"Al-Teeb",
+"Al-Thagar",
+"Al-Tharthar",
+"Al-Wajihia",
+"Al-Walid",
+"Al-Warka",
+"Al-Wihda",
+"Al-Yousifya",
+"Al-Zab",
+"Al-Zubaidiya",
+"Ali Al-Sharki",
+"Altun Qupri",
+"Ameraly",
+"Atreesh",
+"Baghdad Al-Jedeeda",
+"Balak",
+"Bardarash",
+"Bartilla",
+"Barwana",
+"Barwari Bala",
+"Barzan",
+"Bashiqa",
+"Bateel",
+"Batifa",
+"Bazian",
+"Bebaz",
+"Begeel",
+"Beni Hasheem",
+"Beni Saad",
+"Beyara",
+"Bitwana",
+"Bradost",
+"Buhriz",
+"Cenkaw",
+"Dercar",
+"Diana",
+"Dibaga",
+"Dijla",
+"Dinarta",
+"Fayde",
+"Garmat Beni Said",
+"Ghammas",
+"Gnareen",
+"Gwyer",
+"Haji Omaran",
+"Hammam Al-Alil",
+"Hamreen",
+"Harir",
+"Hero",
+"Hibhib",
+"Jabarra",
+"Jalawla",
+"Jassan",
+"Jurf Al-Sakhar",
+"Kadr Karam",
+"Kanan",
+"Karmak",
+"Khailfan",
+"Khoshnaw",
+"Khourmal",
+"Kubaisa",
+"Kumait",
+"Kurdsein",
+"Lilan",
+"Makkhoul",
+"Mandali",
+"Markaz Abu Al-Khaseeb",
+"Markaz Afaq",
+"Markaz Ain Al-Tamur",
+"Markaz Al-Adhamiya",
+"Markaz Al-Amadiya",
+"Markaz Al-Baaj",
+"Markaz Al-Basrah",
+"Markaz Al-Chibayish",
+"Markaz Al-Diwaniya",
+"Markaz Al-Falluja",
+"Markaz Al-Faw",
+"Markaz Al-Hamdaniya",
+"Markaz Al-Hamza",
+"Markaz Al-Hawiga",
+"Markaz Al-Hilla",
+"Markaz Al-Hindiya",
+"Markaz Al-Kadhimiya",
+"Markaz Al-Kahla",
+"Markaz Al-Karkh",
+"Markaz Al-Khalis",
+"Markaz Al-Khidhir",
+"Markaz Al-Kufa",
+"Markaz Al-Kut",
+"Markaz Al-Mada'in",
+"Markaz Al-Mahawil",
+"Markaz Al-Mahmoudiya",
+"Markaz Al-Maimouna",
+"Markaz Al-Midaina",
+"Markaz Al-Muqdadiya",
+"Markaz Al-Najaf",
+"Markaz Al-Nasiriya",
+"Markaz Al-Noamaniya",
+"Markaz Al-Qurna",
+"Markaz Al-Ramadi",
+"Markaz Al-Rifai",
+"Markaz Al-Rumaitha",
+"Markaz Al-Rutba",
+"Markaz Al-Salman",
+"Markaz Al-Shatra",
+"Markaz Al-Shikhan",
+"Markaz Al-Shirqat",
+"Markaz Al-Suwaira",
+"Markaz Al-Thawra",
+"Markaz Al-Zubair",
+"Markaz Ali Al-Gharbi",
+"Markaz Ana",
+"Markaz Aqra",
+"Markaz Badra",
+"Markaz Baladruz",
+"Markaz Beygee",
+"Markaz Chamchamal",
+"Markaz Daquq",
+"Markaz Derbendikhan",
+"Markaz Dibis",
+"Markaz Duhok",
+"Markaz Erbil",
+"Markaz Halabja",
+"Markaz Hatra",
+"Markaz Heet",
+"Markaz Kalar",
+"Markaz Kerbela",
+"Markaz Khanaqin",
+"Markaz Kifri",
+"Markaz Kirkuk",
+"Markaz Koysinjaq",
+"Markaz Makhmour",
+"Markaz Panjwin",
+"Markaz Pshdar",
+"Markaz Qalat Saleh",
+"Markaz Rania",
+"Markaz Rawanduz",
+"Markaz Samarra",
+"Markaz Sharbazher",
+"Markaz Shat Al-Arab",
+"Markaz Sinjar",
+"Markaz Sumail",
+"Markaz Telafar",
+"Markaz Tilkaef",
+"Markaz Tooz Khurmato",
+"Markaz Zakho",
+"Mawat",
+"Mazouri Bala",
+"Mergasur",
+"Midan",
+"Mirka",
+"Namroud",
+"Nawdasht",
+"Nerwa Rekan",
+"Outba",
+"Qalaa't Ansab",
+"Qalat Siker",
+"Qara Tabe",
+"Qaradagh",
+"Qaraj",
+"Qaratu",
+"Qasruk",
+"Qazanya",
+"Qura Hanjeer",
+"Qushtappa",
+"Rabia",
+"Rawa",
+"Safwan",
+"Said Dekhil",
+"Salah Al-Din"]}></InteractiveMap>
     </div>
   );
 }

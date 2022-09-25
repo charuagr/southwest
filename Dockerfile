@@ -24,4 +24,4 @@ COPY backend ./backend
 
 RUN cd backend && npm install && npm run build
 
-CMD [ "node","backend/build/index.js"]
+CMD [ "node","backend/build/index.js", "production"]

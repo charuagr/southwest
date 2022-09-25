@@ -13,6 +13,11 @@ function read_database(sql:string):Promise<Array<any>> {
         })
     })
 }
+
+app.get('/gooo', async (req, res) => {
+
+    
+})
 app.get('/params', async (req:Request, res:Response) => {
     let response:Array<string> = []
     let data:Array<any> = await read_database("PRAGMA table_info(Iraq)")

@@ -4,7 +4,7 @@ import {Database} from 'sqlite3';
 import path from 'path'
 import cors from'cors'
 const app: Express = express();
-const port = 1200;
+const port = process.env.PORT || 1200;
 app.use(cors())
 console.log("Dir", __dirname);
 

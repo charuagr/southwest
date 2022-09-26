@@ -44,6 +44,8 @@ api.get('/geojson/:section', async (req, res) => {
         // console.log(polyList);
         
         let numList = []
+        let mean_lat = 0
+        let mean_long = 0
         if (polyList) {
             for (let x of polyList) {
                 if (x.startsWith(' ')) {
@@ -52,8 +54,12 @@ api.get('/geojson/:section', async (req, res) => {
                 let coors = x.split(' ')
                 let lat = parseFloat(coors[0])
                 let long = parseFloat(coors[1])
+                mean_lat += lat
+                mean_long += long
                 numList.push([lat, long])
             }
+            mean_lat = mean_lat / polyList.length
+            mean_long = mean_long / polyList.length
         }
         
         let geoJson = {
@@ -61,6 +67,10 @@ api.get('/geojson/:section', async (req, res) => {
             "geometry": {
                 type: "Polygon",
                 coordinates: [numList]
+            },
+            properties: {
+                district: req.params.section,
+                mean_center: [ mean_long, mean_lat]
             }
         }
         res.send(geoJson)

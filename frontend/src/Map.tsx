@@ -1,5 +1,5 @@
 import React from 'react';
-import {Map, Marker, GeoJson, GeoJsonFeature} from 'pigeon-maps'
+import {Map, Marker, GeoJson, Overlay } from 'pigeon-maps'
 import axios from 'axios';
 import {osm} from 'pigeon-maps/providers'
 import { stamenTerrain } from 'pigeon-maps/providers'
@@ -7,6 +7,8 @@ import {backend_url} from './util'
 
 interface IState {
     geoJsonFeatures?: any
+    select_district: string
+    mean_anchor:[number,number]
 }
 
 interface IProp {
@@ -24,7 +26,9 @@ export class InteractiveMap extends React.Component<IProp, IState> {
                   type: "MultiPolygon",
                   coordinates: []
                 },
-             }]}
+             }],
+            select_district: "t",
+            mean_anchor: [43.913898686391015, 33.48787577839854]}
     }
     async componentDidUpdate(prevProps:any) {
         if (prevProps === this.props) {          
@@ -40,13 +44,22 @@ export class InteractiveMap extends React.Component<IProp, IState> {
         this.setState({geoJsonFeatures:geoFeatures})
     }
     
-    
+    clickHandler(event:any, anchor:any, feature:any) {
+      console.log("EVENT", event);
+      console.log("anchor", anchor);
+      console.log("feature", feature);
+      this.setState({select_district: feature.properties.district, mean_anchor: feature.properties.mean_center})
+
+
+    }
     render () {
 
         return (
+          <div>
             <Map height={1000} defaultCenter={[
               33.312805, 44.361488
               ]} defaultZoom={7}>
+
             <GeoJson data = {{
                 type: "FeatureCollection",
                 features: this.state.geoJsonFeatures
@@ -67,9 +80,13 @@ export class InteractiveMap extends React.Component<IProp, IState> {
                 }
 
               }
-            }}> </GeoJson>
-
+            }} onClick={({event, anchor, payload})=>{this.clickHandler(event, anchor, payload)}}> </GeoJson>
+            <Overlay anchor={this.state.mean_anchor} offset={[0, 0]}>
+              <h3>{this.state.select_district}</h3>
+            </Overlay>
          </Map> 
+
+          </div>
         )
 
 

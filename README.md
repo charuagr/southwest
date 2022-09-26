@@ -24,8 +24,9 @@ Backend will run on port localhost:1200
 - setup your heroku deployment according to the [setup guide](https://devcenter.heroku.com/articles/getting-started-with-nodejs#set-up)
 
 - In the root directory(Southwest):
+```bash
 git push heroku master
-
+```
 
 
 **The app is eployed on https://southwestdeploy.herokuapp.com/** 

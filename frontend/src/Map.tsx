@@ -36,12 +36,14 @@ export class InteractiveMap extends React.Component<IProp, IState> {
         }
         const geoFeatures:Array<any> = []
         for (const x of this.props.districts) {
-            let dat = await axios.get(backend_url + "geojson/" + x)
+            let dat = axios.get(backend_url + "geojson/" + x).then((dat) =>{
+              geoFeatures.push(dat.data)
+              this.setState({geoJsonFeatures:geoFeatures})
+
+            })
             
-            geoFeatures.push(dat.data)
         }
         
-        this.setState({geoJsonFeatures:geoFeatures})
     }
     
     clickHandler(event:any, anchor:any, feature:any) {
